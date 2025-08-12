@@ -110,6 +110,19 @@ app.get('/api/health', (req, res) => {
   res.json({ ok: true });
 });
 
+// Root info page to avoid 404 on server root
+app.get('/', (req, res) => {
+  const client = process.env.CLIENT_ORIGIN || 'http://localhost:5173';
+  res.type('html').send(`<!doctype html>
+  <html><head><meta charset="utf-8"><title>QuickIron API</title>
+  <style>body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;padding:24px;line-height:1.5}</style>
+  </head><body>
+  <h1>QuickIron API</h1>
+  <p>Backend is running. Open the frontend at <a href="${client}">${client}</a>.</p>
+  <p>Health: <a href="/api/health">/api/health</a></p>
+  </body></html>`);
+});
+
 // Auth: request OTP
 app.post('/api/auth/request-otp', async (req, res) => {
   try {
