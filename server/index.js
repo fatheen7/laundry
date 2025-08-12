@@ -263,6 +263,16 @@ app.post('/api/contact', (req, res) => {
 });
 
 const PORT = process.env.PORT || 4000;
+
+// Serve built client if available (production)
+const CLIENT_DIST = path.resolve(__dirname, '../client/dist');
+if (fs.existsSync(CLIENT_DIST)) {
+  app.use(express.static(CLIENT_DIST));
+  app.get(/^\/(?!api).*/, (req, res) => {
+    res.sendFile(path.join(CLIENT_DIST, 'index.html'));
+  });
+}
+
 server.listen(PORT, () => {
   console.log(`Server listening on http://localhost:${PORT}`);
 });
